@@ -1,7 +1,5 @@
 package model;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Connection;
@@ -9,30 +7,28 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UsuarioDAO extends Usuario implements Serializable{
+public class OperarioDAO extends Operario implements Serializable{
+
 	@Serial
 	private static final long serialVersionUID = 1L;
 	
-	private final static String INICIO ="SELECT id,usuario,contrasena FROM usuario WHERE usuario =? AND contrasena=?";
-	
-	public UsuarioDAO() {}
-	public UsuarioDAO(String nombre, String contrasena) {
+	private final static String INICIO ="SELECT id,usuario,contrasena FROM operario WHERE usuario =? AND contrasena=?";
+
+	public OperarioDAO() {}
+	public OperarioDAO(String nombre, String contrasena) {
 		super(nombre,contrasena);
 	}
-	public UsuarioDAO(int id, String nombre, String contrasena) {
-		super(id, nombre, contrasena);
-		
-	}
+	
 	private Connection con = null;
 	
 	/**
-	 * Método para comprobar si en la BD si existe un usuario 
+	 * Método para comprobar si en la BD si existe un operario 
 	 * con un nombre y una contraseña dados
 	 * @param u
 	 * @return
 	 * @throws DAOExcepcion 
 	 */
-	public boolean getPassword(UsuarioDAO u) {
+	public boolean getPassword(OperarioDAO u) {
 		boolean result=true;
 		//UsuarioDAO u1 = new UsuarioDAO();
 		con = utils.Connect.getConnect();
@@ -78,7 +74,5 @@ public class UsuarioDAO extends Usuario implements Serializable{
 		
 	}
 	
-
 	
-
 }
