@@ -10,6 +10,7 @@ public class Operario implements Serializable{
 	private int id;
 	private String nombre;
 	private String contrasena;
+	
 	public Operario() {
 		super();
 	}

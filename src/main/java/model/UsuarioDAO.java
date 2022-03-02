@@ -9,11 +9,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
+
 public class UsuarioDAO extends Usuario implements Serializable{
 	@Serial
 	private static final long serialVersionUID = 1L;
 	
 	private final static String INICIO ="SELECT id,usuario,contrasena FROM usuario WHERE usuario =? AND contrasena=?";
+	private final static String VER_SALDO="SELECT c.id,c.nCuenta,c.saldo FROM cuenta as c, usuario as u WHERE c.id_usuario=u.id AND u.id=?";
+	private final static String UPDATE_CUENTA ="UPDATE cuenta SET saldo=? WHERE id=?";
 	
 	public UsuarioDAO() {}
 	public UsuarioDAO(String nombre, String contrasena) {
@@ -23,6 +27,9 @@ public class UsuarioDAO extends Usuario implements Serializable{
 		super(id, nombre, contrasena);
 		
 	}
+	
+
+
 	private Connection con = null;
 	
 	/**
@@ -78,7 +85,76 @@ public class UsuarioDAO extends Usuario implements Serializable{
 		
 	}
 	
-
 	
+	public Cuenta getSaldoDelUsuario(Usuario u) {
+		Cuenta c= new Cuenta ();
+		con = utils.Connect.getConnect();
+		if(con!=null) {
+			
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			
+			try {
+				ps = con.prepareStatement(VER_SALDO);
+				ps.setInt(1, u.getId());
+				
+				rs=ps.executeQuery();
+				while(rs.next()) {
+				
+				c.setId(rs.getInt("id"));
+				c.setnCuenta(rs.getInt("nCuenta"));
+					
+				c.setSaldo(rs.getInt("saldo"));
+				
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				
+			}finally {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					
+				}
+				
+			}
+	
+		}
+		return c;
+	}
+	
+	public int actualizarSaldoDelUsuario (UsuarioDAO u) {
+		int rs = 0;
+		Cuenta c = u.getSaldoDelUsuario(u);
+		con = utils.Connect.getConnect();
+		if (con != null) {
+			PreparedStatement q=null;
+			try {
+				q = con.prepareStatement(UPDATE_CUENTA);
+				q.setInt(1,c.saldo);
+				q.setInt(2,c.id);
+				
+				
+				rs = q.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				
+			}finally {
+				try {
+					q.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					
+				}
+				
+			}
+		}
+		return rs;
+	}
+
+		
 
 }

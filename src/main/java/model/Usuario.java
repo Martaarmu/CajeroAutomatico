@@ -1,6 +1,8 @@
 package model;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Usuario implements Serializable{
 	@Serial
@@ -9,7 +11,7 @@ public class Usuario implements Serializable{
 	private int id;
 	private String nombre;
 	private String contrasena;
-	
+
 	public Usuario() {}
 	
 	public Usuario(String nombre, String contrasena) {
@@ -25,6 +27,7 @@ public class Usuario implements Serializable{
 		this.contrasena = contrasena;
 	}
 	
+
 	public int getId() {
 		return id;
 	}
@@ -43,9 +46,13 @@ public class Usuario implements Serializable{
 	public void setContrasena(String contrasena) {
 		this.contrasena = contrasena;
 	}
+	
+
+	
+
 	@Override
 	public String toString() {
-		return "Usuario [nombre=" + nombre + ", contrasena=" + contrasena + "]";
+		return "Usuario [id=" + id + ", nombre=" + nombre + ", contrasena=" + contrasena + "]";
 	}
 
 	@Override

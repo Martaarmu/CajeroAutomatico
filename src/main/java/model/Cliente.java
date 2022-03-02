@@ -68,7 +68,8 @@ public class Cliente extends Thread implements Serializable {
 
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("El servidor se ha desconectado.");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -121,6 +122,7 @@ public class Cliente extends Thread implements Serializable {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				//System.out.println("El servidor se ha desconectado.");
 			}
 		}
 	}

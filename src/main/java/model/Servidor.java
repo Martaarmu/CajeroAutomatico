@@ -9,6 +9,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
+
 import model.UsuarioDAO;
 
 public class Servidor extends Thread implements Serializable {
@@ -56,10 +58,31 @@ public class Servidor extends Thread implements Serializable {
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("El cliente se ha desconectado.");
 		}
 	}
+	
+	
+	///////////////////////////////////////////////////// SE ACABA DEL MAIN
+	private static DataInputStream in;
+	private static DataOutputStream out;
+	private static UsuarioDAO u;
+	private static OperarioDAO o;
+	public Servidor(DataInputStream in, DataOutputStream out, UsuarioDAO u) {
+		this.in = in;
+		this.out = out;
+		this.u = u;
+	}
 
+	public Servidor(DataInputStream in, DataOutputStream out, OperarioDAO o) {
+		this.in = in;
+		this.out = out;
+		this.o = o;
+	}
+
+	
+	
 	public static void logeoUsuario(DataInputStream in, DataOutputStream out, ObjectOutputStream outo) {
 		boolean loggeo = false;
 
@@ -130,22 +153,29 @@ public class Servidor extends Thread implements Serializable {
 		}
 	}
 
-	private static DataInputStream in;
-	private static DataOutputStream out;
-	private static Usuario u;
-	private static Operario o;
 
-	public Servidor(DataInputStream in, DataOutputStream out, Usuario u) {
-		this.in = in;
-		this.out = out;
-		this.u = u;
+	public void verSaldo() {
+		
+		Cuenta c = new Cuenta();
+		c = u.getSaldoDelUsuario(u);
+		System.out.println(c.getSaldo());
 	}
+	
+	public void sacarDinero(Usuario u) {
+		
+		Scanner sn = new Scanner(System.in);
+		CuentaDAO c = new CuentaDAO();
+		
+		
+		System.out.println(c);
+		System.out.println("cuanto dinero quieres ingresar?");
+		int saldo = sn.nextInt();
+		c.setSaldo(saldo);
+		
+		
+	}
+	
 
-	public Servidor(DataInputStream in, DataOutputStream out, Operario o) {
-		this.in = in;
-		this.out = out;
-		this.o = o;
-	}
 
 	public void run() {
 
@@ -167,8 +197,13 @@ public class Servidor extends Thread implements Serializable {
 					switch (opcion) {
 					case 1:
 						System.out.println("opcion 1 recibida");
+						verSaldo();
 						break;
 					case 2:
+						System.out.println("opcion 2 recibida");
+						sacarDinero(u);
+						
+						
 						break;
 
 					case 3:
