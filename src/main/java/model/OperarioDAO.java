@@ -13,7 +13,7 @@ public class OperarioDAO extends Operario implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private final static String INICIO ="SELECT id,usuario,contrasena FROM operario WHERE usuario =? AND contrasena=?";
-
+	
 	public OperarioDAO() {}
 	public OperarioDAO(String nombre, String contrasena) {
 		super(nombre,contrasena);
@@ -73,6 +73,7 @@ public class OperarioDAO extends Operario implements Serializable{
 		
 		
 	}
+	
 	
 	
 }

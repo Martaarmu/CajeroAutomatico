@@ -18,6 +18,8 @@ public class UsuarioDAO extends Usuario implements Serializable{
 	private final static String INICIO ="SELECT id,usuario,contrasena FROM usuario WHERE usuario =? AND contrasena=?";
 	private final static String VER_SALDO="SELECT c.id,c.nCuenta,c.saldo FROM cuenta as c, usuario as u WHERE c.id_usuario=u.id AND u.id=?";
 	private final static String UPDATE_CUENTA ="UPDATE cuenta SET saldo=? WHERE id=?";
+	private static final String CREAR_USUARIO = "INSERT INTO usuario (usuario, contrasena) VALUES (?,?)";
+	private final static String GETUSUARIOBYID ="SELECT * FROM usuario WHERE id=?";
 	
 	public UsuarioDAO() {}
 	public UsuarioDAO(String nombre, String contrasena) {
@@ -86,8 +88,8 @@ public class UsuarioDAO extends Usuario implements Serializable{
 	}
 	
 	
-	public Cuenta getSaldoDelUsuario(Usuario u) {
-		Cuenta c= new Cuenta ();
+	public CuentaDAO getSaldoDelUsuario(Usuario u) {
+		CuentaDAO c= new CuentaDAO ();
 		con = utils.Connect.getConnect();
 		if(con!=null) {
 			
@@ -102,8 +104,7 @@ public class UsuarioDAO extends Usuario implements Serializable{
 				while(rs.next()) {
 				
 				c.setId(rs.getInt("id"));
-				c.setnCuenta(rs.getInt("nCuenta"));
-					
+				c.setnCuenta(rs.getInt("nCuenta"));	
 				c.setSaldo(rs.getInt("saldo"));
 				
 				}
@@ -155,6 +156,60 @@ public class UsuarioDAO extends Usuario implements Serializable{
 		return rs;
 	}
 
-		
+	/**
+     * Método para crear un nuevo usuario
+     * @return nuevo usuario
+     * @throws Exception 
+     */
+    public int crearUsuario(Usuario u) throws Exception {
+    	con = utils.Connect.getConnect();
+        int num = 0;
+        
+        
+        if(con!=null) {
+            try {
+                PreparedStatement ps=con.prepareStatement(CREAR_USUARIO);
+                
+                ps.setString(1, u.getNombre());
+                ps.setString(2,  u.getContrasena());
+                
+                
+                num = ps.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new Exception("Error en SQL", e);
+            }
+        }else {
+            System.out.println("No se ha podido agregar usuario, fallo en la conexión");
+        }
+        return num;
+    }
+    
+    public UsuarioDAO usuarioByID(int id_usuario){
+        
+    	con = utils.Connect.getConnect();
+        UsuarioDAO result = new UsuarioDAO();
+
+        if (con != null) {
+            try {
+                PreparedStatement q = con.prepareStatement(GETUSUARIOBYID);
+                q.setInt(1, id_usuario);
+                ResultSet rs = q.executeQuery();
+                while (rs.next()) {
+                    result.setId(rs.getInt("id"));
+                    result.setNombre(rs.getString("usuario"));
+                    result.setContrasena(rs.getString("contrasena"));
+                    
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+               
+            }
+        }else {
+            System.out.println("No se ha podido recuperar la cuenta, fallo en la conexión");
+        }
+
+        return result;
+    }
 
 }

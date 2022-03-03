@@ -12,7 +12,7 @@ public class Cuenta implements Serializable{
 	protected int id;
 	protected int nCuenta;
 	protected int saldo;
-	private Usuario u;
+	protected Usuario u;
 	
 	public Cuenta() {}
 	
@@ -30,6 +30,7 @@ public class Cuenta implements Serializable{
 		this.saldo = saldo;
 		this.u = u;
 	}
+	
 
 	public int getId() {
 		return id;
@@ -65,7 +66,7 @@ public class Cuenta implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Cuenta [id=" + id + ", nCuenta=" + nCuenta + ", saldo=" + saldo + ", u=" + u + "]";
+		return "Cuenta [id=" + id + ", nCuenta=" + nCuenta + ", saldo=" + saldo + ", u=" + u + "]\n";
 	}
 	
 	
