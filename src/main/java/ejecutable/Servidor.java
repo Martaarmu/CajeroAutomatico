@@ -1,4 +1,4 @@
-package model;
+package ejecutable;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -12,7 +12,9 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Scanner;
 
-import model.UsuarioDAO;
+import modelDAO.CuentaDAO;
+import modelDAO.OperarioDAO;
+import modelDAO.UsuarioDAO;
 
 public class Servidor extends Thread implements Serializable {
 	@Serial
@@ -93,7 +95,7 @@ public class Servidor extends Thread implements Serializable {
 	public static void logeoUsuario(DataInputStream in, DataOutputStream out, ObjectOutputStream outo) {
 		boolean loggeo = false;
 
-		while (!loggeo) {
+		while(!loggeo){
 
 			try {
 				
@@ -108,7 +110,7 @@ public class Servidor extends Thread implements Serializable {
 
 					System.out.println("Creada la conexión con el cliente " + u1.getNombre());
 					out.writeUTF("OK,USUARIO");
-					UsuarioDAO u2 = new UsuarioDAO(u1.getNombre(),u1.getContrasena());
+					UsuarioDAO u2 = new UsuarioDAO(u1.getId(),u1.getNombre(),u1.getContrasena());
 					outo.writeObject(u2);
 					loggeo = true;
 
@@ -127,7 +129,7 @@ public class Servidor extends Thread implements Serializable {
 				e.printStackTrace();
 			}
 
-		}
+		} 
 
 	}
 
@@ -247,7 +249,7 @@ public class Servidor extends Thread implements Serializable {
 			UsuarioDAO u = new UsuarioDAO(usuario,contrasena);
 			u.crearUsuario(u);
 			
-			System.out.println("Usuario creado con éxito: \n"+u);
+			out.writeUTF("Usuario creado con éxito \n");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -364,7 +366,7 @@ public class Servidor extends Thread implements Serializable {
 					out.writeUTF("1. Ver saldo de la cuenta");
 					out.writeUTF("2. Sacar dinero de la cuenta");
 					out.writeUTF("3. Ingresar dinero en la cuenta");
-					out.writeUTF("5. Salir");
+					out.writeUTF("4. Salir");
 					opcion = in.readInt();
 
 					switch (opcion) {
@@ -381,9 +383,7 @@ public class Servidor extends Thread implements Serializable {
 						System.out.println("opcion 3 recibida");
 						ingresarDinero(u);
 						break;
-					case 4:
-						//salir
-						break;
+					
 					default:
 						out.writeUTF("Solo numero del 1 al 6");
 
@@ -393,7 +393,7 @@ public class Servidor extends Thread implements Serializable {
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("El cliente se ha desconectado, voy a parar de escuchar sus mensajes");
 			}
 
 		}else {
@@ -436,7 +436,7 @@ public class Servidor extends Thread implements Serializable {
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("El cliente se ha desconectado, voy a dejar de escuchar sus peticiones");
 			}
 
 		}

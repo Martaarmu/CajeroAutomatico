@@ -1,4 +1,4 @@
-package model;
+package ejecutable;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -11,6 +11,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
+
+import modelDAO.OperarioDAO;
+import modelDAO.UsuarioDAO;
 
 public class Cliente extends Thread implements Serializable {
 	@Serial
@@ -82,7 +85,7 @@ public class Cliente extends Thread implements Serializable {
 			System.out.println("El servidor se ha desconectado.");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("No se pudo enviar el objecto porque se desconectó el cliente con el servidor, intentelo más tarde");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -122,8 +125,6 @@ public class Cliente extends Thread implements Serializable {
 			while (!salir) {
 
 				try {
-					System.out.println("aquiiii");
-
 					String opcion1 = in.readUTF();
 					String opcion2 = in.readUTF();
 					String opcion3 = in.readUTF();
@@ -159,6 +160,9 @@ public class Cliente extends Thread implements Serializable {
 						out.writeInt(cantidad1);
 						String respuesta5 = in.readUTF();
 						System.out.println(respuesta5);
+						break;
+					case 4:
+						System.exit(0);
 						break;
 					default:
 						mensaje = in.readUTF();
@@ -201,6 +205,9 @@ public class Cliente extends Thread implements Serializable {
 						System.out.println(contrasenaUsuario);
 						String contrasena = sn.next();
 						out.writeUTF(contrasena);
+						
+						String confirmacion = in.readUTF();
+						System.out.println(confirmacion);
 						break;
 					case 2:
 						String respuesta2 = in.readUTF();

@@ -9,9 +9,9 @@ public class Cuenta implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 
-	protected int id;
-	protected int nCuenta;
-	protected int saldo;
+	public int id;
+	public int nCuenta;
+	public int saldo;
 	protected Usuario u;
 	
 	public Cuenta() {}

@@ -1,4 +1,4 @@
-package model;
+package modelDAO;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -8,6 +8,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import model.Cuenta;
+import model.Usuario;
 
 
 
@@ -30,8 +33,6 @@ public class UsuarioDAO extends Usuario implements Serializable{
 		
 	}
 	
-
-
 	private Connection con = null;
 	
 	/**
@@ -41,7 +42,7 @@ public class UsuarioDAO extends Usuario implements Serializable{
 	 * @return
 	 * @throws DAOExcepcion 
 	 */
-	public boolean getPassword(UsuarioDAO u) {
+	public synchronized boolean getPassword(UsuarioDAO u) {
 		boolean result=true;
 		//UsuarioDAO u1 = new UsuarioDAO();
 		con = utils.Connect.getConnect();
@@ -87,8 +88,12 @@ public class UsuarioDAO extends Usuario implements Serializable{
 		
 	}
 	
-	
-	public CuentaDAO getSaldoDelUsuario(Usuario u) {
+	/**
+	 * Método que devuelve una cuenta de un usuario determinado
+	 * @param u
+	 * @return CuentaDAO
+	 */
+	public synchronized CuentaDAO getSaldoDelUsuario(Usuario u) {
 		CuentaDAO c= new CuentaDAO ();
 		con = utils.Connect.getConnect();
 		if(con!=null) {
@@ -102,10 +107,12 @@ public class UsuarioDAO extends Usuario implements Serializable{
 				
 				rs=ps.executeQuery();
 				while(rs.next()) {
+					
 				
 				c.setId(rs.getInt("id"));
 				c.setnCuenta(rs.getInt("nCuenta"));	
 				c.setSaldo(rs.getInt("saldo"));
+				
 				
 				}
 			} catch (SQLException e) {
@@ -126,7 +133,12 @@ public class UsuarioDAO extends Usuario implements Serializable{
 		return c;
 	}
 	
-	public int actualizarSaldoDelUsuario (UsuarioDAO u) {
+	/**
+	 * Método para actualizar el saldo de un usuario
+	 * @param u
+	 * @return
+	 */
+	public synchronized int actualizarSaldoDelUsuario (UsuarioDAO u) {
 		int rs = 0;
 		Cuenta c = u.getSaldoDelUsuario(u);
 		con = utils.Connect.getConnect();
@@ -161,7 +173,7 @@ public class UsuarioDAO extends Usuario implements Serializable{
      * @return nuevo usuario
      * @throws Exception 
      */
-    public int crearUsuario(Usuario u) throws Exception {
+    public synchronized int crearUsuario(Usuario u) throws Exception {
     	con = utils.Connect.getConnect();
         int num = 0;
         
@@ -185,7 +197,12 @@ public class UsuarioDAO extends Usuario implements Serializable{
         return num;
     }
     
-    public UsuarioDAO usuarioByID(int id_usuario){
+    /**
+     * Método que devuelve un usuario de la BD mediante su id
+     * @param id_usuario
+     * @return UsuarioDAO
+     */
+    public synchronized UsuarioDAO usuarioByID(int id_usuario){
         
     	con = utils.Connect.getConnect();
         UsuarioDAO result = new UsuarioDAO();

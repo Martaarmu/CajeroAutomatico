@@ -1,4 +1,4 @@
-package model;
+package modelDAO;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -8,6 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import model.Cuenta;
+import model.Usuario;
 
 public class CuentaDAO extends Cuenta implements Serializable{
 	@Serial
@@ -39,7 +42,11 @@ public class CuentaDAO extends Cuenta implements Serializable{
 
 	private Connection con = null;
 	
-	public List<CuentaDAO> allCuentas(){
+	/**
+	 * Método que devuelve una lista con todas las cuentas existentes en la BD
+	 * @return List<CuentaDAO>
+	 */
+	public synchronized List<CuentaDAO> allCuentas(){
 		
 		con = utils.Connect.getConnect();
 		List<CuentaDAO> result = new ArrayList<CuentaDAO>();
@@ -69,7 +76,14 @@ public class CuentaDAO extends Cuenta implements Serializable{
 		
 	}
 	
-    public CuentaDAO cuentaByID(int idCuenta) throws Exception {
+	
+	/**
+	 * Método que devuelve una cuenta por su id
+	 * @param idCuenta
+	 * @return CuentaDAO
+	 * @throws Exception
+	 */
+    public synchronized CuentaDAO cuentaByID(int idCuenta) throws Exception {
       
     	con = utils.Connect.getConnect();
         CuentaDAO result = new CuentaDAO();
@@ -99,7 +113,13 @@ public class CuentaDAO extends Cuenta implements Serializable{
         return result;
     }
     
-    public CuentaDAO cuentaByIDUsuario(int id_usuario) throws Exception {
+    /**
+     * Método que devuelve una cuenta según el id del usuario
+     * @param id_usuario
+     * @return CuentaDAO
+     * @throws Exception
+     */
+    public synchronized CuentaDAO cuentaByIDUsuario(int id_usuario) throws Exception {
         
     	con = utils.Connect.getConnect();
         CuentaDAO result = new CuentaDAO();
@@ -128,9 +148,15 @@ public class CuentaDAO extends Cuenta implements Serializable{
     
     
     
-    
+    /**
+     * Método utilizado para aumentar el saldo en una cuenta de la BD
+     * @param idCuenta
+     * @param cantidad
+     * @return
+     * @throws Exception
+     */
 	
-	public int IngresarSaldo(int idCuenta, int cantidad) throws Exception {
+	public synchronized int IngresarSaldo(int idCuenta, int cantidad) throws Exception {
         int result = 0;
         
         con = utils.Connect.getConnect();
@@ -155,7 +181,14 @@ public class CuentaDAO extends Cuenta implements Serializable{
         return result;
     }
 	
-	public int SacarSaldo(int idCuenta, int cantidad) throws Exception {
+	/**
+	 * Método para disminuir el saldo de una cuenta en la BD
+	 * @param idCuenta
+	 * @param cantidad
+	 * @return
+	 * @throws Exception
+	 */
+	public synchronized int SacarSaldo(int idCuenta, int cantidad) throws Exception {
         int result = 0;
         
         con = utils.Connect.getConnect();
@@ -186,7 +219,7 @@ public class CuentaDAO extends Cuenta implements Serializable{
      * @return
      * @throws Exception
      */
-    public int eliminarCuenta(int idCuenta) throws Exception {
+    public synchronized int eliminarCuenta(int idCuenta) throws Exception {
         int result = 0;
         con = utils.Connect.getConnect();
         if(con != null) {
@@ -215,7 +248,7 @@ public class CuentaDAO extends Cuenta implements Serializable{
      * @return
      * @throws Exception
      */
-    public int crearCuenta(Cuenta c) throws Exception {
+    public synchronized int crearCuenta(Cuenta c) throws Exception {
         int result = 0;
         con = utils.Connect.getConnect();
         if(con != null) {

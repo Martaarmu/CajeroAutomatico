@@ -1,4 +1,4 @@
-package model;
+package modelDAO;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import model.Operario;
 
 public class OperarioDAO extends Operario implements Serializable{
 
@@ -28,7 +30,7 @@ public class OperarioDAO extends Operario implements Serializable{
 	 * @return
 	 * @throws DAOExcepcion 
 	 */
-	public boolean getPassword(OperarioDAO u) {
+	public synchronized boolean getPassword(OperarioDAO u) {
 		boolean result=true;
 		//UsuarioDAO u1 = new UsuarioDAO();
 		con = utils.Connect.getConnect();
